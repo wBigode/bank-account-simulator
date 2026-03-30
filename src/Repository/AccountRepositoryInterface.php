@@ -7,4 +7,5 @@ namespace App\Repository;
 interface AccountRepositoryInterface
 {
     public function reset(): void;
+    public function find(string $id): ?array;
 }

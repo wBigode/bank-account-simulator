@@ -12,4 +12,9 @@ class AccountRepository implements AccountRepositoryInterface
     {
         $this->accounts = [];
     }
+
+    public function find(string $id): ?array
+    {
+        return $this->accounts[$id] ?? null;
+    }
 }
