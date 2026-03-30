@@ -6,6 +6,7 @@ namespace App\Http;
 
 use App\Exception\AppException;
 use App\Http\Handler\BalanceHandler;
+use App\Http\Handler\EventHandler;
 use App\Http\Handler\ResetHandler;
 use Throwable;
 
@@ -13,7 +14,8 @@ class Router
 {
     public function __construct(
         private ResetHandler $resetHandler,
-        private BalanceHandler $balanceHandler
+        private BalanceHandler $balanceHandler,
+        private EventHandler $eventHandler
     ) {
     }
 
@@ -23,15 +25,16 @@ class Router
             $method = $request->server["request_method"] ?? '';
             $path = parse_url($request->server["request_uri"] ?? '', PHP_URL_PATH);
 
-            [$status, $body] = match(true) {
+            [$status, $body] = match (true) {
                 $method === 'POST' && $path === '/reset' => $this->resetHandler->handle(),
                 $method === 'GET' && $path === '/balance' => $this->balanceHandler->handle($request),
+                $method === 'POST' && $path === '/event' => $this->eventHandler->handle($request),
                 default => [404, "0"],
             };
 
         } catch (AppException $e) {
             $status = $e->getStatusCode();
-            $body = $response->getMessage();
+            $body = $e->getMessage();
         } catch (Throwable $e) {
             $status = 500;
             $body = "Internal Server Error";

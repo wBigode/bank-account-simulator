@@ -17,4 +17,9 @@ class AccountRepository implements AccountRepositoryInterface
     {
         return $this->accounts[$id] ?? null;
     }
+
+    public function save(string $id, array $account): void
+    {
+        $this->accounts[$id] = $account;
+    }
 }
