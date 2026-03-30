@@ -1,0 +1,9 @@
+services:
+  bank:
+    image: phpswoole/swoole:php8.3-alpine
+    ports:
+      - "9501:9501"
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    command: php index.php
