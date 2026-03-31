@@ -57,17 +57,17 @@ class AccountService
             return null;
         }
 
-        $destination = $this->findOrCreateAccount($destinationId);
-
         $origin['balance'] -= $amount;
+        $this->accountRepository->save($originId, $origin);
+
+        $destination = $this->findOrCreateAccount($destinationId);
         $destination['balance'] += $amount;
 
-        $this->accountRepository->save($originId, $origin);
         $this->accountRepository->save($destinationId, $destination);
 
         return [
-            'origin' => $origin,
-            'destination' => $destination
+            'origin' => $this->accountRepository->find($originId),
+            'destination' => $this->accountRepository->find($destinationId)
         ];
     }
 

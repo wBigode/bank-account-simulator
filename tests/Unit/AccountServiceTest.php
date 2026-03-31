@@ -203,4 +203,15 @@ class AccountServiceTest extends TestCase
         $this->assertSame(10, $this->accountService->getBalance('100'));
         $this->assertSame(10, $this->accountService->getBalance('200'));
     }
+
+    public function testTransferToSameAccount(): void
+    {
+        $this->accountService->deposit('100', 20);
+
+        $result = $this->accountService->transfer('100', '100', 10);
+
+        $this->assertSame(20, $this->accountService->getBalance('100'));
+        $this->assertSame(20, $result["origin"]["balance"]);
+        $this->assertSame(20, $result["destination"]["balance"]);
+    }
 }
